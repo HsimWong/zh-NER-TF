@@ -3,9 +3,9 @@ import numpy as np
 import os, time, sys
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tf.contrib.rnn import LSTMCell
-from tf.contrib.crf import crf_log_likelihood
-from tf.contrib.crf import viterbi_decode
+#from tf.contrib.rnn import tf.contrib.rnn.LSTMCell
+#from tf.contrib.crf import tf.contrib.crf.crf_log_likelihood
+#from tf.contrib.crf import tf.contrib.crf.viterbi_decode
 from data import pad_sequences, batch_yield
 from utils import get_logger
 from eval import conlleval
@@ -63,8 +63,8 @@ class BiLSTM_CRF(object):
 
     def biLSTM_layer_op(self):
         with tf.variable_scope("bi-lstm"):
-            cell_fw = LSTMCell(self.hidden_dim)
-            cell_bw = LSTMCell(self.hidden_dim)
+            cell_fw = tf.contrib.rnn.LSTMCell(self.hidden_dim)
+            cell_bw = tf.contrib.rnn.LSTMCell(self.hidden_dim)
             (output_fw_seq, output_bw_seq), _ = tf.nn.bidirectional_dynamic_rnn(
                 cell_fw=cell_fw,
                 cell_bw=cell_bw,
@@ -93,7 +93,7 @@ class BiLSTM_CRF(object):
 
     def loss_op(self):
         if self.CRF:
-            log_likelihood, self.transition_params = crf_log_likelihood(inputs=self.logits,
+            log_likelihood, self.transition_params = tf.contrib.crf.crf_log_likelihood(inputs=self.logits,
                                                                    tag_indices=self.labels,
                                                                    sequence_lengths=self.sequence_lengths)
             self.loss = -tf.reduce_mean(log_likelihood)
@@ -275,7 +275,7 @@ class BiLSTM_CRF(object):
                                                  feed_dict=feed_dict)
             label_list = []
             for logit, seq_len in zip(logits, seq_len_list):
-                viterbi_seq, _ = viterbi_decode(logit[:seq_len], transition_params)
+                viterbi_seq, _ = tf.contrib.crf.viterbi_decode(logit[:seq_len], transition_params)
                 label_list.append(viterbi_seq)
             return label_list, seq_len_list
 
