@@ -3,9 +3,9 @@ import numpy as np
 import os, time, sys
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.contrib.rnn import LSTMCell
-from tensorflow.contrib.crf import crf_log_likelihood
-from tensorflow.contrib.crf import viterbi_decode
+from tf.contrib.rnn import LSTMCell
+from tf.contrib.crf import crf_log_likelihood
+from tf.contrib.crf import viterbi_decode
 from data import pad_sequences, batch_yield
 from utils import get_logger
 from eval import conlleval
