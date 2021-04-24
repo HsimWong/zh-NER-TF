@@ -209,7 +209,7 @@ class BiLSTM_CRF(object):
             feed_dict, _ = self.get_feed_dict(seqs, labels, self.lr, self.dropout_keep_prob)
             _, loss_train, summary, step_num_ = sess.run([self.train_op, self.loss, self.merged, self.global_step],
                                                          feed_dict=feed_dict)
-            if step + 1 == 1 or (step + 1) % 300 == 0 or step + 1 == num_batches:
+            if step + 1 == 1 or (step + 1) % 20 == 0 or step + 1 == num_batches:
                 self.logger.info(
                     '{} epoch {}, step {}, loss: {:.4}, global_step: {}'.format(start_time, epoch + 1, step + 1,
                                                                                 loss_train, step_num))
